@@ -1,0 +1,35 @@
+#                                            #
+#     configuration file for net-monitor     #
+#                                            #
+
+monitor:
+  hosts: # actual hosts
+    - name: ISP1
+      addr: 172.16.1.1
+      type: icmp # currently only icmp and command are supported
+    - name: ISP2
+      addr: 172.16.2.1
+      type: icmp
+    - name: ISP3
+      addr: 172.16.3.1
+      type: command
+      exec: bash /usr/local/bin/check-isp3-availability.sh # exit 1 or 0 # exec param is ignored when type != command
+
+  groups: # availability groups of hosts
+    - name: HA-ISP
+      hosts: [ ISP1, ISP2, ISP3 ]
+      interval: 5 # seconds
+      exec: /usr/local/bin/ha-isp.sh # the script is called when the availability state changes
+      #with arguments indicating which hosts remain available
+      #this exec param is not the same as one in hosts directive. Here you can only pass path to script
+
+    - name: SINGLE-ISP3
+      hosts: [ ISP3 ]
+      interval: 10 # seconds
+      exec: /usr/local/bin/isp3.sh
+      #### optional group settings: ####
+      args: #default arguments: ALL, <HOST>, NONE
+        - default: ALL # redefinition of default 'ALL' argument to 'up' argument
+          redefine: up
+        - default: NONE # redefinition of default 'NONE' argument to 'down' argument
+          redefine: down
