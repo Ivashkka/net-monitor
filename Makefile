@@ -6,6 +6,7 @@ VENV_DIR := $(DIST_DIR)/net-monitor-venv
 CONF_FILES := ./conf.yaml
 SYSD_FILES := ./net-monitor.service
 SIDE_FILES := $(DIST_DIR)/Makefile $(DIST_DIR)/LICENSE $(DIST_DIR)/.gitignore $(DIST_DIR)/README.md $(DIST_DIR)/conf.yaml
+SIDE_DIRS := $(DIST_DIR)/.git
 REQ_FILE := $(DIST_DIR)/requirements.txt
 
 CLEAN_LAST := $(SYSD_DIR)/net-monitor.service
@@ -19,6 +20,7 @@ install:
 	mkdir $(DIST_DIR)
 	cp -r . $(DIST_DIR)
 	rm $(SIDE_FILES)
+	rm -r $(SIDE_DIRS)
 	mkdir $(CONF_DIR)
 	cp $(CONF_FILES) $(CONF_DIR)
 	cp $(SYSD_FILES) $(SYSD_DIR)
