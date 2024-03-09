@@ -51,7 +51,7 @@ def convert_args(availability : str, group : dict):
     args = availability.split('-')
     if 'args' in list(group.keys()):
         for redef in group['args']:
-            args = list(map(lambda x: x.replace(redef['default'], redef['redefine']), args))
+            args = [redef['redefine'] if x == redef['default'] else x for x in args]
     return args
 
 
@@ -61,7 +61,7 @@ def init_groups():
         availib = check_group_availability(group)
         current_states[group['name']] = availib
         timers[group['name']] = time.time()
-        args = convert_args(availib)
+        args = convert_args(availib, group)
         notify_ha_script(group['exec'], args)
 
 
@@ -84,8 +84,10 @@ def main():
                 availib = check_group_availability(group)
                 if availib != current_states[group['name']]:
                     current_states[group['name']] = availib
-                    notify_ha_script(group['exec'], availib.split('-'))
+                    args = convert_args(availib, group)
+                    notify_ha_script(group['exec'], args)
                 timers[group['name']] = time.time()
+        time.sleep(1)
     print("done")
 
 
