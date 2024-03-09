@@ -1,0 +1,15 @@
+[Unit]
+Description=Network monitor
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/usr/local/bin/net-monitor
+PIDFile=/run/net-monitor.pid
+SyslogIdentifier=net-monitor
+ExecStart=/usr/local/bin/net-monitor/net-monitor-venv/bin/python3 /usr/local/bin/net-monitor/main.py
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
