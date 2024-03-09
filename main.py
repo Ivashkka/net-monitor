@@ -47,13 +47,22 @@ def notify_ha_script(path : str, args : list):
     return subprocess.call(["bash", path, *args])
 
 
+def convert_args(availability : str, group : dict):
+    args = availability.split('-')
+    if 'args' in list(group.keys()):
+        for redef in group['args']:
+            args = list(map(lambda x: x.replace(redef['default'], redef['redefine']), args))
+    return args
+
+
 def init_groups():
     global timers
     for group in current_conf['monitor']['groups']:
         availib = check_group_availability(group)
         current_states[group['name']] = availib
         timers[group['name']] = time.time()
-        notify_ha_script(group['exec'], availib.split('-'))
+        args = convert_args(availib)
+        notify_ha_script(group['exec'], args)
 
 
 def sigterm_handler(signal, frame):

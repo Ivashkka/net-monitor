@@ -1,6 +1,6 @@
 DIST_DIR := /usr/local/bin/net-monitor
 CONF_DIR := /etc/net-monitor
-VENV_DIR := $(DIST_DIR)/nam_server_venv
+VENV_DIR := $(DIST_DIR)/net-monitor-venv
 
 CONF_FILES := ./conf.yaml
 SIDE_FILES := $(DIST_DIR)/Makefile $(DIST_DIR)/LICENSE $(DIST_DIR)/.gitignore $(DIST_DIR)/README.md $(DIST_DIR)/conf.yaml
