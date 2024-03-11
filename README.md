@@ -21,12 +21,44 @@
 <p><code>systemctl enable net-monitor</code></p>
 <br>
 <p><b>settings:</b></p>
-<p>all net-monitor settings located in /etc/net-monitor/conf.yaml</p>
-<p>hosts - list of network hosts and info about it</p>
-<p>groups - actual monitoring units</p>
-<br>
-<p><b>usage:</b></p>
-<p>net-monitor daemon works in bg. Where availability status of network group changes, net-monitor will call specified script with suitable arguments (see conf.yaml)
+<p>all net-monitor settings located in <code>/etc/net-monitor/conf.yaml</code></p>
+<pre>
+monitor:
+  hosts: # actual hosts
+    - name: ISP1
+      addr: 172.16.1.1
+      type: icmp # currently only icmp and command are supported
+    - name: ISP2
+      addr: 172.16.2.1
+      type: icmp
+    - name: ISP3
+      addr: 172.16.3.1
+      type: command
+      exec: bash /usr/local/bin/check-isp3-availability.sh # exit 1 or 0 # exec param is ignored when type != command
+
+  groups: # availability groups of hosts
+    - name: HA-ISP
+      hosts: [ ISP1, ISP2, ISP3 ]
+      interval: 5 # seconds
+      exec: /usr/local/bin/ha-isp.sh # the script is called when the availability state changes
+      #with arguments indicating which hosts remain available
+      #this exec param is not the same as one in hosts directive. Here you can only pass path to script
+
+    - name: SINGLE-ISP3
+      hosts: [ ISP3 ]
+      interval: 10 # seconds
+      exec: /usr/local/bin/isp3.sh
+      #### optional group settings: ####
+      args: #default arguments: ALL, <HOST>, NONE
+        - default: ALL # redefinition of default 'ALL' argument to 'up' argument
+          redefine: up
+        - default: NONE # redefinition of default 'NONE' argument to 'down' argument
+          redefine: down
+</pre>
+<p><code>hosts</code> - list of network hosts and info about it. Use icmp or command types</p>
+<p><code>groups</code> - actual monitoring units. Group can contain one or more hosts. When availability ststus changes,</p>
+<p>net-monitor calls specified in exec field script with arguments indicating which hosts remain available</p>
+<p>net-monitor daemon works in bg and monitors specified groups.
 <br>
 <p><b>uninstall:</b></p>
 <p>stop net-monitor:</p>
