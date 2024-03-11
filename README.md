@@ -53,10 +53,28 @@ monitor:
         - default: NONE # redefinition of default 'NONE' argument to 'down' argument
           redefine: down
 </pre>
-<p><code>hosts</code> - list of network hosts and info about it. Use icmp or command types</p>
+<p><code>hosts</code> - list of network hosts and info about it. Use icmp or command types.</p>
 <p><code>groups</code> - actual monitoring units. Group can contain one or more hosts. When availability ststus changes,</p>
-<p>net-monitor calls specified in exec field script with arguments indicating which hosts remain available</p>
-<p>net-monitor daemon works in bg and monitors specified groups.
+<p>net-monitor calls specified in exec field script with arguments indicating which hosts remain available.</p>
+<p>net-monitor daemon works in bg and monitors specified groups.</p>
+<p>example of /usr/local/bin/ha-isp.sh script:</p>
+<pre>
+case $1 in
+    ALL)
+        ip route replace default \
+            nexthop via 172.16.1.1 dev enp0s3 weight 1 \
+            nexthop via 172.16.2.1 dev enp0s8 weight 1
+    ;;
+    ISP1)
+        ip route replace default via 172.16.1.1 dev enp0s3
+    ;;
+    ISP2)
+        ip route replace default via 172.16.2.1 dev enp0s8
+    ;;
+esac
+</pre>
+<p>where ALL, HOST, NONE - arguments passed from net-monitor on script call</p>
+<p>you can redefine default arguments whith your own in conf.yaml</p>
 <br>
 <p><b>uninstall:</b></p>
 <p>stop net-monitor:</p>
