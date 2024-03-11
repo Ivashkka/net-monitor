@@ -35,7 +35,6 @@ monitor:
       addr: 172.16.3.1
       type: command
       exec: bash /usr/local/bin/check-isp3-availability.sh # exit 1 or 0 # exec param is ignored when type != command
-
   groups: # availability groups of hosts
     - name: HA-ISP
       hosts: [ ISP1, ISP2, ISP3 ]
@@ -43,7 +42,6 @@ monitor:
       exec: /usr/local/bin/ha-isp.sh # the script is called when the availability state changes
       #with arguments indicating which hosts remain available
       #this exec param is not the same as one in hosts directive. Here you can only pass path to script
-
     - name: SINGLE-ISP3
       hosts: [ ISP3 ]
       interval: 10 # seconds
