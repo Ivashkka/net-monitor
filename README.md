@@ -75,6 +75,8 @@ esac
 </pre>
 <p>where ALL, HOST, NONE - arguments passed from net-monitor on script call</p>
 <p>you can redefine default arguments whith your own in conf.yaml</p>
+<p>net-monitor demonstration:</p>
+<img src="./demonstration.svg">
 <br>
 <p><b>uninstall:</b></p>
 <p>stop net-monitor:</p>
